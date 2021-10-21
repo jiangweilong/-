@@ -1,0 +1,987 @@
+{
+	"info": {
+		"_postman_id": "65303f92-698c-44fe-ac7c-ef72245c4685",
+		"name": "术者管理后台",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "登录 新增移动端用户 查询用户  删除用户",
+			"item": [
+				{
+					"name": "登录",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//postman.setEnvironmentVariable(\"token\", responseBody);\r",
+									"//将token设置成全局变量\r",
+									"pm.environment.set(\"token\", responseBody)\r",
+									"console.log(responseBody);\r",
+									"//状态断言\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"//断言的结果包含包括一个指定的字符串\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"eyJhb\");\r",
+									"});\r",
+									"//返回的结果做JSON格式的检查   JSON value\r",
+									"//断言返回的结果等于一个字符串  适合字符串少的\r",
+									"//pm.test(\"Body is correct\", function () {\r",
+									"//    pm.response.to.have.body(\"\");\r",
+									"//});\r",
+									"//断言响应头中包含有指定的响应头\r",
+									"pm.test(\"Content-Type is present\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									"//接口响应时间小于200ms\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"//断言的post/get请求的返回状态码，是否是在指定的范围中\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 202]);\r",
+									"});\r",
+									"//返回的状态码信息 包含指定的字符串\r",
+									"pm.test(\"Status code name has string\", function () {\r",
+									"    pm.response.to.have.status(\"OK\");\r",
+									"});\r",
+									"function beginTime(){\r",
+									"　　//获取当前日期\r",
+									"　　var date = new Date();\r",
+									"\r",
+									"　　//获取当前日期；\r",
+									"　　date.setDate(date.getDate());\r",
+									"　　var Y = date.getFullYear()+'';\r",
+									"　　var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1):date.getMonth()+1+'');//获取当前月份，js中月份从0开始，所以要+1；\r",
+									"　　var D = (date.getDate() < 10 ? '0'+date.getDate():date.getDate()+'');\r",
+									"　　return Y+'-'+M+'-'+D+' '+'00:00:00';\r",
+									"}\r",
+									" pm.globals.set(\"beginTime\",beginTime());\r",
+									"\r",
+									"\r",
+									"function endTime(){\r",
+									"    var date = new Date();\r",
+									"    //获取当前日期增加3天\r",
+									"　　date.setDate(date.getDate()+ 3 );\r",
+									"    var Y = date.getFullYear();\r",
+									"    var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1):date.getMonth()+1+'');\r",
+									"    var D = (date.getDate() < 10 ? '0'+date.getDate():date.getDate()+'');\r",
+									"    return Y+'-'+M+'-'+D+' '+'23:59:59';\r",
+									"}\r",
+									"pm.globals.set(\"endTime\",endTime());\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"loginName\":\"13100000077\",\"password\":\"123456\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseUrl}}/v1.0/User/login-management"
+					},
+					"response": []
+				},
+				{
+					"name": "获取登录账号信息",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//做JSON 格式的断言检查\r",
+									"pm.test(\"Your test name\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.userRoleDtos[0].id).to.eql(\"8721d440-c2e4-4744-831a-9cb9a34ea7b0\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/v1.0/User/info"
+					},
+					"response": []
+				},
+				{
+					"name": "用户列表首页",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//通过json格式进行断言，\r",
+									"pm.test(\"Your test name\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.userDtos[0].hospitalName).to.eql(\"四川省人民医院\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/v1.0/User/users/paged?pageIndex=1&pageSize=10",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1.0",
+								"User",
+								"users",
+								"paged"
+							],
+							"query": [
+								{
+									"key": "pageIndex",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "新增移动端用户",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//定义一个变量，接收随机数\r",
+									"var Mobilephone = Math.floor(Math.random()*(1000)+13541220000)\r",
+									"//因为Math.random生产有小数，需要四舍五入\r",
+									"Mobilephone = Math.round(Mobilephone)\r",
+									"console.log(Mobilephone)\r",
+									"//设置成全局变量\r",
+									"pm.environment.set(\"Mobilephone\", Mobilephone)\r",
+									"var Id = responseBody\r",
+									"var id2 = Id.replace(/\"/g, \"\"); \r",
+									"pm.environment.set(\"Id\",id2)\r",
+									"console.log(Id);\r",
+									"//接口响应时间\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"userType\":4,\"mobile\":\"{{Mobilephone}}\",\"password\":\"123456\",\"name\":\"测试{{$randomInt}}\",\"hospitalId\":\"8692dfb1-ec1e-4e32-9512-fc853631fda0\",\"departmentId\":\"dd8d94fd-dad1-40ad-d018-08d78a781be2\",\"verifyStatus\":0,\"loginName\":\"{{Mobilephone}}\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseUrl}}/v1.0/User"
+					},
+					"response": []
+				},
+				{
+					"name": "设置角色成为学员",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//性能断言 接口响应时间不能高于200ms\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"//业务断言\r",
+									"pm.test(\"Your test name\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.isSucceed).to.eql(true);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"userRoleTypes\":[11],\"name\":\"{{name}}\",\"userId\":\"{{Id}}\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseUrl}}/v1.0/UserRole/addOrUpdate"
+					},
+					"response": []
+				},
+				{
+					"name": "通过Id查询单个用户",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//接口状态码，返回值\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+									"});\r",
+									"//获取用户name  \r",
+									"var jsonData = pm.response.json();\r",
+									"var name = jsonData.name\r",
+									"console.log(name)\r",
+									"//将name存入到全局变量里\r",
+									"pm.environment.set(\"name\", name);\r",
+									"//响应时间的断言\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/v1.0/User/{{Id}}"
+					},
+					"response": []
+				},
+				{
+					"name": "更新用户状态（不用）",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//性能断言  接口响应时间不能低于200ms\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"jobTitle\":null,\"headKey\":\"ec331565-c5bc-4855-9744-45aa8ca36d2f.png\",\"headUrl\":\"http://ossimages.shuzhehome.com/ec331565-c5bc-4855-9744-45aa8ca36d2f.png?Expires=1634201588&OSSAccessKeyId=LTAI4FgfUX9ZF5JUmT7vcsk5&Signature=nvCxXBrMR03BdQhT7J5GEErcMz0%3D&x-oss-process=image%2Fresize%2Cp_5\",\"wxHeadUrl\":null,\"jobDescription\":null,\"hospitalId\":\"8692dfb1-ec1e-4e32-9512-fc853631fda0\",\"hospitalName\":\"阿坝州人民医院\",\"name\":\"测试165\",\"credential\":null,\"credentialUrl\":\"\",\"departmentId\":\"00000000-0000-0000-0000-000000000000\",\"departmentName\":null,\"positionId\":\"00000000-0000-0000-0000-000000000000\",\"positionName\":null,\"jobLevelId\":null,\"jobLevelName\":null,\"gender\":0,\"genderTag\":\"未知\",\"ranking\":0,\"rankingTag\":\"普通\",\"userType\":4,\"userTypeTag\":\"移动APP用户\",\"mobile\":\"13541220649\",\"provinceId\":null,\"cityId\":null,\"province\":null,\"city\":null,\"street\":null,\"idCard\":null,\"loginName\":\"13541220649\",\"verifyStatus\":2,\"verifyStatusTag\":\"审核通过\",\"isFaceCompleted\":false,\"isBindingWx\":false,\"isBindingQQ\":false,\"sort\":0,\"userDirections\":null,\"userEndoscopeProfileDto\":null,\"userMiniProgramProfileDto\":null,\"userQQProfileDto\":null,\"userBusinessCardDto\":null,\"userSettingDto\":null,\"userRoleDtos\":[{\"id\":\"924a7433-5872-4742-bcb1-69a6943a8283\",\"userRoleType\":11,\"userRoleTypeTag\":\"学员\"}],\"id\":\"a30c8530-ff24-4d90-ad8f-1d45e09054fb\",\"createTime\":\"2021-10-14 16:27:21\",\"createTimeTag\":\"2021-10-14 16:27:21\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseUrl}}/v1.0/User/update"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "新增班级  编辑班级 添加课程  删除课程",
+			"item": [
+				{
+					"name": "新增班级",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//性能断言  响应时间小于200ms\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"//业务断言  \r",
+									"\r",
+									"//    var jsonData = pm.response.json()\r",
+									"//    var X = jsonData.message\r",
+									"//返回字符串的断言\r",
+									"pm.test(\"Your test name\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.message).to.eql(\"保存成功\");\r",
+									"});\r",
+									"//获取班级ID\r",
+									"var jsonData = pm.response.json();\r",
+									"var X = jsonData.data ;\r",
+									"// console.log(X)\r",
+									"// var id2 = X.replace(/\"/g, \"\");\r",
+									"pm.environment.set(\"classId\", X);\r",
+									"console.log(X)\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"name\":\"接口测试{{$timestamp}}\",\"location\":\"成都\",\"startTime\":\"{{beginTime}}\",\"endTime\":\"{{endTime}}\",\"studentNum\":100,\"instructorUserId\":\"a4e085ad-1bfb-4989-65e6-08d7b9a49e9b\",\"certificateKey\":\"\",\"introductionKey\":\"\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseUrl}}/v1.0/Class/add"
+					},
+					"response": []
+				},
+				{
+					"name": "查询班级详细信息 获取classname",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//定义一个变量 接受response\r",
+									"var jsonData = pm.response.json()\r",
+									"//获取className 的值\r",
+									"var className = jsonData.data.name\r",
+									"console.log(className)\r",
+									"//将取到的值设置未环境变量\r",
+									"pm.environment.set(\"className\", className);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/v1.0/Class/getById?id={{classId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1.0",
+								"Class",
+								"getById"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "{{classId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "添加授课老师（目前老师固定）",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//性能断言 接口返回时间不能低于200ms\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"//业务断言  使用json  返回字符串对比\r",
+									"pm.test(\"Your test name\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.message).to.eql(\"保存成功\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"name\":\"{{className}}\",\"classId\":\"{{classId}}\",\"teacherId\":\"5f2f7a4c-022b-4ff1-4a12-08d78dcec6de\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://192.168.0.114:5001/v1.0/Class/addTeacher"
+					},
+					"response": []
+				},
+				{
+					"name": "移除授课老师",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//性能断言  接口返回时间不低于200ms\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"//业务断言  body里的字符串包含\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"true\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"classId\":\"{{classId}}\",\"teacherId\":\"5f2f7a4c-022b-4ff1-4a12-08d78dcec6de\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://192.168.0.114:5001/v1.0/Class/deleteTeacher"
+					},
+					"response": []
+				},
+				{
+					"name": "新增课程",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//性能断言 接口返回时间不能高于200ms\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"//业务断言 \r",
+									"pm.test(\"Your test name\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.isSucceed).to.eql(true);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"classId\":\"{{classId}}\",\"name\":\"测试\",\"startTime\":\"{{beginTime}}\",\"createUserId\":\"d10d52fb-fa20-422e-ad58-3a1d8b2037c2\",\"teacherId\":\"5f2f7a4c-022b-4ff1-4a12-08d78dcec6de\",\"needRollCall\":true,\"allowLeave\":true,\"saveNoteEnable\":true,\"reminderEnable\":true,\"playBackEnable\":true,\"curriculumMethod\":1,\"curriculumStatus\":1,\"introductionKey\":\"\",\"createUserName\":\"术者智慧\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseUrl}}/v1.0/ClassCurriculum/add"
+					},
+					"response": []
+				},
+				{
+					"name": "编辑课程(不用)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//性能断言 接口响应时间不能大于200ms\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\": {\r\n        \"id\": \"3891fa05-c465-4e4f-bbdf-93dfce39086f\",\r\n        \"createTime\": \"2021-09-14 09:47:04\",\r\n        \"name\": \"测试9.14\",\r\n        \"location\": \"测试\",\r\n        \"startTime\": \"2021-02-01 00:00:00\",\r\n        \"endTime\": \"2021-09-01 00:00:00\",\r\n        \"currentStudentNum\": 14,\r\n        \"studentNum\": 20,\r\n        \"notReviewedStudentNum\": 0,\r\n        \"instructorUserId\": \"8fd44d58-80d7-475d-9003-f924798b5b4c\",\r\n        \"certificateKey\": \"69c76a44-08cb-428e-85c6-e930f5f5e7a8.jpg\",\r\n        \"introductionKey\": null,\r\n        \"certificateUrl\": \"http://ossimages.shuzhehome.com/69c76a44-08cb-428e-85c6-e930f5f5e7a8.jpg?Expires=1634524240&OSSAccessKeyId=LTAI4FgfUX9ZF5JUmT7vcsk5&Signature=2NLUvoRcrpYQOxk3ciNLg4HrwBM%3D&x-oss-process=image%2Fresize%2Cp_10\",\r\n        \"introductionUrl\": \"\",\r\n        \"userApplyStatuses\": 0,\r\n        \"userApplyStatusesTag\": \"未申请\",\r\n        \"classStatus\": 1,\r\n        \"classStatusTag\": \"报名中\",\r\n        \"instructorUser\": {\r\n            \"id\": \"8fd44d58-80d7-475d-9003-f924798b5b4c\",\r\n            \"jobTitle\": null,\r\n            \"headKey\": null,\r\n            \"headUrl\": \"\",\r\n            \"hospitalName\": \"乐山市人民医院\",\r\n            \"name\": \"东哥\",\r\n            \"gender\": 1,\r\n            \"genderTag\": \"男\",\r\n            \"mobile\": \"18228392117\",\r\n            \"loginName\": null\r\n        },\r\n        \"classStudents\": [\r\n            {\r\n                \"studentId\": \"521a6842-9534-4c9a-a70c-cc01e859c7d1\",\r\n                \"createTime\": \"2021-10-13 11:05:17\",\r\n                \"applyStatus\": 2,\r\n                \"applyStatusTag\": \"已通过\",\r\n                \"student\": {\r\n                    \"id\": \"521a6842-9534-4c9a-a70c-cc01e859c7d1\",\r\n                    \"jobTitle\": null,\r\n                    \"headKey\": null,\r\n                    \"headUrl\": \"\",\r\n                    \"hospitalName\": null,\r\n                    \"name\": \"蒋维龙\",\r\n                    \"gender\": 0,\r\n                    \"genderTag\": \"未知\",\r\n                    \"mobile\": \"13541220536\",\r\n                    \"loginName\": null\r\n                }\r\n            },\r\n            {\r\n                \"studentId\": \"f38b1390-c3c6-4612-b278-f27fb24dee69\",\r\n                \"createTime\": \"2021-10-09 14:23:52\",\r\n                \"applyStatus\": 2,\r\n                \"applyStatusTag\": \"已通过\",\r\n                \"student\": {\r\n                    \"id\": \"f38b1390-c3c6-4612-b278-f27fb24dee69\",\r\n                    \"jobTitle\": null,\r\n                    \"headKey\": null,\r\n                    \"headUrl\": \"\",\r\n                    \"hospitalName\": null,\r\n                    \"name\": \"W.\",\r\n                    \"gender\": 0,\r\n                    \"genderTag\": \"未知\",\r\n                    \"mobile\": \"13550062903\",\r\n                    \"loginName\": null\r\n                }\r\n            },\r\n            {\r\n                \"studentId\": \"137b5ae1-71ce-4c09-b999-562750372989\",\r\n                \"createTime\": \"2021-10-09 13:41:45\",\r\n                \"applyStatus\": 2,\r\n                \"applyStatusTag\": \"已通过\",\r\n                \"student\": {\r\n                    \"id\": \"137b5ae1-71ce-4c09-b999-562750372989\",\r\n                    \"jobTitle\": null,\r\n                    \"headKey\": null,\r\n                    \"headUrl\": \"\",\r\n                    \"hospitalName\": \"阿坝州人民医院\",\r\n                    \"name\": \"13541220536\",\r\n                    \"gender\": 0,\r\n                    \"genderTag\": \"未知\",\r\n                    \"mobile\": \"13541220536\",\r\n                    \"loginName\": null\r\n                }\r\n            },\r\n            {\r\n                \"studentId\": \"be79146f-94c0-43d0-8d53-6cd17dfb7e3f\",\r\n                \"createTime\": \"2021-09-30 14:58:24\",\r\n                \"applyStatus\": 2,\r\n                \"applyStatusTag\": \"已通过\",\r\n                \"student\": {\r\n                    \"id\": \"be79146f-94c0-43d0-8d53-6cd17dfb7e3f\",\r\n                    \"jobTitle\": null,\r\n                    \"headKey\": \"17E6ADA7-6216-467E-A87C-1DC931F07725.jpg\",\r\n                    \"headUrl\": \"http://ossimages.shuzhehome.com/17E6ADA7-6216-467E-A87C-1DC931F07725.jpg?Expires=1634524240&OSSAccessKeyId=LTAI4FgfUX9ZF5JUmT7vcsk5&Signature=Lg2noNYLVcZXQ9DH8GmydFabl0E%3D&x-oss-process=image%2Fresize%2Cp_5\",\r\n                    \"hospitalName\": \"四川省人民医院\",\r\n                    \"name\": \"罗玉杨\",\r\n                    \"gender\": 1,\r\n                    \"genderTag\": \"男\",\r\n                    \"mobile\": \"15010689868\",\r\n                    \"loginName\": null\r\n                }\r\n            },\r\n            {\r\n                \"studentId\": \"2005ca9a-651a-4a77-a72e-381b91309153\",\r\n                \"createTime\": \"2021-09-30 14:49:43\",\r\n                \"applyStatus\": 2,\r\n                \"applyStatusTag\": \"已通过\",\r\n                \"student\": {\r\n                    \"id\": \"2005ca9a-651a-4a77-a72e-381b91309153\",\r\n                    \"jobTitle\": null,\r\n                    \"headKey\": \"ec331565-c5bc-4855-9744-45aa8ca36d2f.png\",\r\n                    \"headUrl\": \"http://ossimages.shuzhehome.com/ec331565-c5bc-4855-9744-45aa8ca36d2f.png?Expires=1634524240&OSSAccessKeyId=LTAI4FgfUX9ZF5JUmT7vcsk5&Signature=vRBKPRX9SuwJuIUi6SLeb%2Bh8TMc%3D&x-oss-process=image%2Fresize%2Cp_5\",\r\n                    \"hospitalName\": \"测试\",\r\n                    \"name\": \"火头\",\r\n                    \"gender\": 0,\r\n                    \"genderTag\": \"未知\",\r\n                    \"mobile\": \"17683190903\",\r\n                    \"loginName\": null\r\n                }\r\n            },\r\n            {\r\n                \"studentId\": \"5e38403d-c4e2-4f02-b313-6151ce15ddd9\",\r\n                \"createTime\": \"2021-09-29 16:46:18\",\r\n                \"applyStatus\": 2,\r\n                \"applyStatusTag\": \"已通过\",\r\n                \"student\": {\r\n                    \"id\": \"5e38403d-c4e2-4f02-b313-6151ce15ddd9\",\r\n                    \"jobTitle\": null,\r\n                    \"headKey\": null,\r\n                    \"headUrl\": \"\",\r\n                    \"hospitalName\": null,\r\n                    \"name\": \"冬哥\",\r\n                    \"gender\": 0,\r\n                    \"genderTag\": \"未知\",\r\n                    \"mobile\": \"18228392117\",\r\n                    \"loginName\": null\r\n                }\r\n            },\r\n            {\r\n                \"studentId\": \"7c6b7a9a-4abb-4d13-a72c-2a7e4bb8409d\",\r\n                \"createTime\": \"2021-09-28 17:27:27\",\r\n                \"applyStatus\": 2,\r\n                \"applyStatusTag\": \"已通过\",\r\n                \"student\": {\r\n                    \"id\": \"7c6b7a9a-4abb-4d13-a72c-2a7e4bb8409d\",\r\n                    \"jobTitle\": null,\r\n                    \"headKey\": null,\r\n                    \"headUrl\": \"\",\r\n                    \"hospitalName\": \"四川省人民医院\",\r\n                    \"name\": \"邓阳洋\",\r\n                    \"gender\": 0,\r\n                    \"genderTag\": \"未知\",\r\n                    \"mobile\": \"18682756640\",\r\n                    \"loginName\": null\r\n                }\r\n            },\r\n            {\r\n                \"studentId\": \"bbd09373-4e14-46ab-aaae-f69223892095\",\r\n                \"createTime\": \"2021-09-24 10:23:52\",\r\n                \"applyStatus\": 2,\r\n                \"applyStatusTag\": \"已通过\",\r\n                \"student\": {\r\n                    \"id\": \"bbd09373-4e14-46ab-aaae-f69223892095\",\r\n                    \"jobTitle\": null,\r\n                    \"headKey\": \"bannericon20181107031106.png\",\r\n                    \"headUrl\": \"http://ossimages.shuzhehome.com/bannericon20181107031106.png?Expires=1634524240&OSSAccessKeyId=LTAI4FgfUX9ZF5JUmT7vcsk5&Signature=sWYsXpvVDOrx%2BuUUtuVJWXlpuqQ%3D&x-oss-process=image%2Fresize%2Cp_5\",\r\n                    \"hospitalName\": \"术者智慧\",\r\n                    \"name\": \"Rock\",\r\n                    \"gender\": 1,\r\n                    \"genderTag\": \"男\",\r\n                    \"mobile\": \"15679567096\",\r\n                    \"loginName\": null\r\n                }\r\n            },\r\n            {\r\n                \"studentId\": \"e3dd7c11-097a-40c9-91da-874a4b85d739\",\r\n                \"createTime\": \"2021-09-24 10:16:37\",\r\n                \"applyStatus\": 2,\r\n                \"applyStatusTag\": \"已通过\",\r\n                \"student\": {\r\n                    \"id\": \"e3dd7c11-097a-40c9-91da-874a4b85d739\",\r\n                    \"jobTitle\": null,\r\n                    \"headKey\": null,\r\n                    \"headUrl\": \"\",\r\n                    \"hospitalName\": \"茂县人民医院\",\r\n                    \"name\": \".\",\r\n                    \"gender\": 0,\r\n                    \"genderTag\": \"未知\",\r\n                    \"mobile\": \"15002810763\",\r\n                    \"loginName\": null\r\n                }\r\n            },\r\n            {\r\n                \"studentId\": \"234c1ec0-b272-4eaf-a500-737f14803e18\",\r\n                \"createTime\": \"2021-09-23 15:17:39\",\r\n                \"applyStatus\": 2,\r\n                \"applyStatusTag\": \"已通过\",\r\n                \"student\": {\r\n                    \"id\": \"234c1ec0-b272-4eaf-a500-737f14803e18\",\r\n                    \"jobTitle\": null,\r\n                    \"headKey\": null,\r\n                    \"headUrl\": \"\",\r\n                    \"hospitalName\": \"四川省人民医院\",\r\n                    \"name\": \"15010689868\",\r\n                    \"gender\": 2,\r\n                    \"genderTag\": \"女\",\r\n                    \"mobile\": \"15010689868\",\r\n                    \"loginName\": null\r\n                }\r\n            },\r\n            {\r\n                \"studentId\": \"ab09325a-b110-44bd-ad0a-65d49d621f39\",\r\n                \"createTime\": \"2021-09-23 11:52:15\",\r\n                \"applyStatus\": 2,\r\n                \"applyStatusTag\": \"已通过\",\r\n                \"student\": {\r\n                    \"id\": \"ab09325a-b110-44bd-ad0a-65d49d621f39\",\r\n                    \"jobTitle\": null,\r\n                    \"headKey\": null,\r\n                    \"headUrl\": \"\",\r\n                    \"hospitalName\": null,\r\n                    \"name\": \"东哥\",\r\n                    \"gender\": 0,\r\n                    \"genderTag\": \"未知\",\r\n                    \"mobile\": \"18228392117\",\r\n                    \"loginName\": null\r\n                }\r\n            },\r\n            {\r\n                \"studentId\": \"2f58d237-6314-49ae-b935-f85cbda49abe\",\r\n                \"createTime\": \"2021-09-18 13:54:44\",\r\n                \"applyStatus\": 2,\r\n                \"applyStatusTag\": \"已通过\",\r\n                \"student\": {\r\n                    \"id\": \"2f58d237-6314-49ae-b935-f85cbda49abe\",\r\n                    \"jobTitle\": null,\r\n                    \"headKey\": null,\r\n                    \"headUrl\": \"\",\r\n                    \"hospitalName\": \"四川省人民医院\",\r\n                    \"name\": \"明\",\r\n                    \"gender\": 1,\r\n                    \"genderTag\": \"男\",\r\n                    \"mobile\": \"18382824440\",\r\n                    \"loginName\": null\r\n                }\r\n            },\r\n            {\r\n                \"studentId\": \"d0c1e126-fbe3-c210-e5e2-08d6c1a7dd0b\",\r\n                \"createTime\": \"2021-09-18 13:45:02\",\r\n                \"applyStatus\": 2,\r\n                \"applyStatusTag\": \"已通过\",\r\n                \"student\": {\r\n                    \"id\": \"d0c1e126-fbe3-c210-e5e2-08d6c1a7dd0b\",\r\n                    \"jobTitle\": null,\r\n                    \"headKey\": \"5d845376-3009-4fbb-aa37-b1af8eb145e9.jpg\",\r\n                    \"headUrl\": \"http://ossimages.shuzhehome.com/5d845376-3009-4fbb-aa37-b1af8eb145e9.jpg?Expires=1634524240&OSSAccessKeyId=LTAI4FgfUX9ZF5JUmT7vcsk5&Signature=4bEx8qVWJMCNW4nf1knM7QSXWgM%3D&x-oss-process=image%2Fresize%2Cp_5\",\r\n                    \"hospitalName\": \"邛崃市中医医院\",\r\n                    \"name\": \"蒋涛\",\r\n                    \"gender\": 0,\r\n                    \"genderTag\": \"未知\",\r\n                    \"mobile\": \"13100000078\",\r\n                    \"loginName\": null\r\n                }\r\n            },\r\n            {\r\n                \"studentId\": \"8fd44d58-80d7-475d-9003-f924798b5b4c\",\r\n                \"createTime\": \"2021-09-17 16:12:00\",\r\n                \"applyStatus\": 2,\r\n                \"applyStatusTag\": \"已通过\",\r\n                \"student\": {\r\n                    \"id\": \"8fd44d58-80d7-475d-9003-f924798b5b4c\",\r\n                    \"jobTitle\": null,\r\n                    \"headKey\": null,\r\n                    \"headUrl\": \"\",\r\n                    \"hospitalName\": \"乐山市人民医院\",\r\n                    \"name\": \"东哥\",\r\n                    \"gender\": 1,\r\n                    \"genderTag\": \"男\",\r\n                    \"mobile\": \"18228392117\",\r\n                    \"loginName\": null\r\n                }\r\n            }\r\n        ],\r\n        \"classTeachers\": [\r\n            {\r\n                \"teacherId\": \"04c060c6-3858-c14c-7b32-08d6c1a7cd0f\",\r\n                \"createTime\": \"2021-09-26 16:32:46\",\r\n                \"teacher\": {\r\n                    \"id\": \"04c060c6-3858-c14c-7b32-08d6c1a7cd0f\",\r\n                    \"jobTitle\": null,\r\n                    \"headKey\": \"b2e39047-4131-4a91-9716-ac43b32532c6.jpg\",\r\n                    \"headUrl\": \"http://ossimages.shuzhehome.com/b2e39047-4131-4a91-9716-ac43b32532c6.jpg?Expires=1634524240&OSSAccessKeyId=LTAI4FgfUX9ZF5JUmT7vcsk5&Signature=fuqux3xA87kxq7iW1pgE2Hx3bDU%3D&x-oss-process=image%2Fresize%2Cp_5\",\r\n                    \"hospitalName\": \"四川省人民医院\",\r\n                    \"name\": \"胡晓\",\r\n                    \"gender\": 0,\r\n                    \"genderTag\": \"未知\",\r\n                    \"mobile\": \"13100000081\",\r\n                    \"loginName\": null\r\n                }\r\n            },\r\n            {\r\n                \"teacherId\": \"e4491b72-d9e5-ca03-8017-08d6c1a7d7ad\",\r\n                \"createTime\": \"2021-09-28 10:31:17\",\r\n                \"teacher\": {\r\n                    \"id\": \"e4491b72-d9e5-ca03-8017-08d6c1a7d7ad\",\r\n                    \"jobTitle\": null,\r\n                    \"headKey\": \"77bd088f-766b-4e43-9ab9-830d8db6bd3b.jpg\",\r\n                    \"headUrl\": \"http://ossimages.shuzhehome.com/77bd088f-766b-4e43-9ab9-830d8db6bd3b.jpg?Expires=1634524240&OSSAccessKeyId=LTAI4FgfUX9ZF5JUmT7vcsk5&Signature=hK2XL%2BM3tt7ks7VFBa6%2FaI%2BK9Gg%3D&x-oss-process=image%2Fresize%2Cp_5\",\r\n                    \"hospitalName\": \"四川省人民医院\",\r\n                    \"name\": \"熊飞\",\r\n                    \"gender\": 0,\r\n                    \"genderTag\": \"未知\",\r\n                    \"mobile\": \"13100000079\",\r\n                    \"loginName\": null\r\n                }\r\n            },\r\n            {\r\n                \"teacherId\": \"c32b87a5-2e13-c806-0ba0-08d6c1a7cbdd\",\r\n                \"createTime\": \"2021-09-27 11:23:51\",\r\n                \"teacher\": {\r\n                    \"id\": \"c32b87a5-2e13-c806-0ba0-08d6c1a7cbdd\",\r\n                    \"jobTitle\": null,\r\n                    \"headKey\": \"5e8e728e-374d-4397-914a-c17c3e9de54b.jpg\",\r\n                    \"headUrl\": \"http://ossimages.shuzhehome.com/5e8e728e-374d-4397-914a-c17c3e9de54b.jpg?Expires=1634524240&OSSAccessKeyId=LTAI4FgfUX9ZF5JUmT7vcsk5&Signature=Eay3tpGXGimmKCfZ5ZYS6rjimg4%3D&x-oss-process=image%2Fresize%2Cp_5\",\r\n                    \"hospitalName\": \"四川省人民医院\",\r\n                    \"name\": \"刘晓岗\",\r\n                    \"gender\": 0,\r\n                    \"genderTag\": \"未知\",\r\n                    \"mobile\": \"13100000082\",\r\n                    \"loginName\": null\r\n                }\r\n            }\r\n        ],\r\n        \"classPictures\": [\r\n            {\r\n                \"id\": \"cf2cf70e-6e17-42b8-833e-a003df8822dd\",\r\n                \"classId\": \"3891fa05-c465-4e4f-bbdf-93dfce39086f\",\r\n                \"picture\": \"39224c74-f913-44f4-b083-a2f2d68b58ce.jpg\"\r\n            }\r\n        ],\r\n        \"classCurriculums\": [\r\n            {\r\n                \"id\": \"76ea2807-d525-4472-aab8-006c988d0a32\",\r\n                \"classId\": \"3891fa05-c465-4e4f-bbdf-93dfce39086f\",\r\n                \"name\": \"10.12\",\r\n                \"startTime\": \"2021-10-12 09:28:02\",\r\n                \"endTime\": null,\r\n                \"teacherId\": \"c32b87a5-2e13-c806-0ba0-08d6c1a7cbdd\",\r\n                \"needRollCall\": true,\r\n                \"isRollCalled\": false,\r\n                \"rollCallTime\": null,\r\n                \"allowLeave\": true,\r\n                \"saveNoteEnable\": true,\r\n                \"reminderEnable\": true,\r\n                \"playBackEnable\": true,\r\n                \"curriculumMethod\": 1,\r\n                \"curriculumMethodTag\": \"在线直播\",\r\n                \"curriculumStatus\": 0,\r\n                \"curriculumStatusTag\": \"未开始\",\r\n                \"introductionKey\": \"\",\r\n                \"introductionUrl\": \"\",\r\n                \"realTimeResourceKey\": null,\r\n                \"teacher\": {\r\n                    \"id\": \"c32b87a5-2e13-c806-0ba0-08d6c1a7cbdd\",\r\n                    \"jobTitle\": null,\r\n                    \"headKey\": \"5e8e728e-374d-4397-914a-c17c3e9de54b.jpg\",\r\n                    \"headUrl\": \"http://ossimages.shuzhehome.com/5e8e728e-374d-4397-914a-c17c3e9de54b.jpg?Expires=1634524240&OSSAccessKeyId=LTAI4FgfUX9ZF5JUmT7vcsk5&Signature=Eay3tpGXGimmKCfZ5ZYS6rjimg4%3D&x-oss-process=image%2Fresize%2Cp_5\",\r\n                    \"hospitalName\": \"四川省人民医院\",\r\n                    \"name\": \"刘晓岗\",\r\n                    \"gender\": 0,\r\n                    \"genderTag\": \"未知\",\r\n                    \"mobile\": \"13100000082\",\r\n                    \"loginName\": null\r\n                },\r\n                \"className\": \"测试9.14\",\r\n                \"classStatus\": 1,\r\n                \"classStatusTag\": \"报名中\",\r\n                \"operateStatus\": 0,\r\n                \"operateStatusTag\": \"尚未开课_未请假\"\r\n            },\r\n            {\r\n                \"id\": \"ac8da4c9-f3f8-424d-baae-0d1323c67f73\",\r\n                \"classId\": \"3891fa05-c465-4e4f-bbdf-93dfce39086f\",\r\n                \"name\": \"9.28\",\r\n                \"startTime\": \"2021-09-28 09:35:08\",\r\n                \"endTime\": \"2021-09-28 10:56:42\",\r\n                \"teacherId\": \"c32b87a5-2e13-c806-0ba0-08d6c1a7cbdd\",\r\n                \"needRollCall\": true,\r\n                \"isRollCalled\": true,\r\n                \"rollCallTime\": \"2021-09-28 10:56:43\",\r\n                \"allowLeave\": true,\r\n                \"saveNoteEnable\": true,\r\n                \"reminderEnable\": true,\r\n                \"playBackEnable\": true,\r\n                \"curriculumMethod\": 1,\r\n                \"curriculumMethodTag\": \"在线直播\",\r\n                \"curriculumStatus\": 1,\r\n                \"curriculumStatusTag\": \"开课中\",\r\n                \"introductionKey\": \"18861c5d-d4f2-4f7c-9a60-ef28b7a04739.jpg\",\r\n                \"introductionUrl\": \"http://ossimages.shuzhehome.com/18861c5d-d4f2-4f7c-9a60-ef28b7a04739.jpg?Expires=1634524240&OSSAccessKeyId=LTAI4FgfUX9ZF5JUmT7vcsk5&Signature=68RBi%2Fcj6Dhb8E4tvPAEjRDGkkQ%3D&x-oss-process=image%2Fresize%2Cp_50\",\r\n                \"realTimeResourceKey\": null,\r\n                \"teacher\": {\r\n                    \"id\": \"c32b87a5-2e13-c806-0ba0-08d6c1a7cbdd\",\r\n                    \"jobTitle\": null,\r\n                    \"headKey\": \"5e8e728e-374d-4397-914a-c17c3e9de54b.jpg\",\r\n                    \"headUrl\": \"http://ossimages.shuzhehome.com/5e8e728e-374d-4397-914a-c17c3e9de54b.jpg?Expires=1634524240&OSSAccessKeyId=LTAI4FgfUX9ZF5JUmT7vcsk5&Signature=Eay3tpGXGimmKCfZ5ZYS6rjimg4%3D&x-oss-process=image%2Fresize%2Cp_5\",\r\n                    \"hospitalName\": \"四川省人民医院\",\r\n                    \"name\": \"刘晓岗\",\r\n                    \"gender\": 0,\r\n                    \"genderTag\": \"未知\",\r\n                    \"mobile\": \"13100000082\",\r\n                    \"loginName\": null\r\n                },\r\n                \"className\": \"测试9.14\",\r\n                \"classStatus\": 1,\r\n                \"classStatusTag\": \"报名中\",\r\n                \"operateStatus\": 0,\r\n                \"operateStatusTag\": \"尚未开课_未请假\"\r\n            },\r\n            {\r\n                \"id\": \"0420decf-ccef-4a56-b861-1d36357f717b\",\r\n                \"classId\": \"3891fa05-c465-4e4f-bbdf-93dfce39086f\",\r\n                \"name\": \"10.13\",\r\n                \"startTime\": \"2021-10-13 09:13:26\",\r\n                \"endTime\": null,\r\n                \"teacherId\": \"c32b87a5-2e13-c806-0ba0-08d6c1a7cbdd\",\r\n                \"needRollCall\": true,\r\n                \"isRollCalled\": false,\r\n                \"rollCallTime\": null,\r\n                \"allowLeave\": true,\r\n                \"saveNoteEnable\": true,\r\n                \"reminderEnable\": true,\r\n                \"playBackEnable\": true,\r\n                \"curriculumMethod\": 1,\r\n                \"curriculumMethodTag\": \"在线直播\",\r\n                \"curriculumStatus\": 0,\r\n                \"curriculumStatusTag\": \"未开始\",\r\n                \"introductionKey\": \"\",\r\n                \"introductionUrl\": \"\",\r\n                \"realTimeResourceKey\": null,\r\n                \"teacher\": {\r\n                    \"id\": \"c32b87a5-2e13-c806-0ba0-08d6c1a7cbdd\",\r\n                    \"jobTitle\": null,\r\n                    \"headKey\": \"5e8e728e-374d-4397-914a-c17c3e9de54b.jpg\",\r\n                    \"headUrl\": \"http://ossimages.shuzhehome.com/5e8e728e-374d-4397-914a-c17c3e9de54b.jpg?Expires=1634524240&OSSAccessKeyId=LTAI4FgfUX9ZF5JUmT7vcsk5&Signature=Eay3tpGXGimmKCfZ5ZYS6rjimg4%3D&x-oss-process=image%2Fresize%2Cp_5\",\r\n                    \"hospitalName\": \"四川省人民医院\",\r\n                    \"name\": \"刘晓岗\",\r\n                    \"gender\": 0,\r\n                    \"genderTag\": \"未知\",\r\n                    \"mobile\": \"13100000082\",\r\n                    \"loginName\": null\r\n                },\r\n                \"className\": \"测试9.14\",\r\n                \"classStatus\": 1,\r\n                \"classStatusTag\": \"报名中\",\r\n                \"operateStatus\": 0,\r\n                \"operateStatusTag\": \"尚未开课_未请假\"\r\n            },\r\n            {\r\n                \"id\": \"288f5e3c-780c-46cf-a29e-237d6a91c631\",\r\n                \"classId\": \"3891fa05-c465-4e4f-bbdf-93dfce39086f\",\r\n                \"name\": \"测试9.28\",\r\n                \"startTime\": \"2021-09-28 10:20:02\",\r\n                \"endTime\": null,\r\n                \"teacherId\": \"e4491b72-d9e5-ca03-8017-08d6c1a7d7ad\",\r\n                \"needRollCall\": true,\r\n                \"isRollCalled\": false,\r\n                \"rollCallTime\": null,\r\n                \"allowLeave\": true,\r\n                \"saveNoteEnable\": true,\r\n                \"reminderEnable\": true,\r\n                \"playBackEnable\": true,\r\n                \"curriculumMethod\": 1,\r\n                \"curriculumMethodTag\": \"在线直播\",\r\n                \"curriculumStatus\": 0,\r\n                \"curriculumStatusTag\": \"未开始\",\r\n                \"introductionKey\": \"\",\r\n                \"introductionUrl\": \"\",\r\n                \"realTimeResourceKey\": null,\r\n                \"teacher\": {\r\n                    \"id\": \"e4491b72-d9e5-ca03-8017-08d6c1a7d7ad\",\r\n                    \"jobTitle\": null,\r\n                    \"headKey\": \"77bd088f-766b-4e43-9ab9-830d8db6bd3b.jpg\",\r\n                    \"headUrl\": \"http://ossimages.shuzhehome.com/77bd088f-766b-4e43-9ab9-830d8db6bd3b.jpg?Expires=1634524240&OSSAccessKeyId=LTAI4FgfUX9ZF5JUmT7vcsk5&Signature=hK2XL%2BM3tt7ks7VFBa6%2FaI%2BK9Gg%3D&x-oss-process=image%2Fresize%2Cp_5\",\r\n                    \"hospitalName\": \"四川省人民医院\",\r\n                    \"name\": \"熊飞\",\r\n                    \"gender\": 0,\r\n                    \"genderTag\": \"未知\",\r\n                    \"mobile\": \"13100000079\",\r\n                    \"loginName\": null\r\n                },\r\n                \"className\": \"测试9.14\",\r\n                \"classStatus\": 1,\r\n                \"classStatusTag\": \"报名中\",\r\n                \"operateStatus\": 0,\r\n                \"operateStatusTag\": \"尚未开课_未请假\"\r\n            },\r\n            {\r\n                \"id\": \"35728ee7-f49f-47fd-8c85-2c0adb7cc696\",\r\n                \"classId\": \"3891fa05-c465-4e4f-bbdf-93dfce39086f\",\r\n                \"name\": \"测试9.29\",\r\n                \"startTime\": \"2021-09-29 09:47:56\",\r\n                \"endTime\": null,\r\n                \"teacherId\": \"c32b87a5-2e13-c806-0ba0-08d6c1a7cbdd\",\r\n                \"needRollCall\": true,\r\n                \"isRollCalled\": false,\r\n                \"rollCallTime\": null,\r\n                \"allowLeave\": true,\r\n                \"saveNoteEnable\": true,\r\n                \"reminderEnable\": true,\r\n                \"playBackEnable\": true,\r\n                \"curriculumMethod\": 1,\r\n                \"curriculumMethodTag\": \"在线直播\",\r\n                \"curriculumStatus\": 0,\r\n                \"curriculumStatusTag\": \"未开始\",\r\n                \"introductionKey\": \"\",\r\n                \"introductionUrl\": \"\",\r\n                \"realTimeResourceKey\": null,\r\n                \"teacher\": {\r\n                    \"id\": \"c32b87a5-2e13-c806-0ba0-08d6c1a7cbdd\",\r\n                    \"jobTitle\": null,\r\n                    \"headKey\": \"5e8e728e-374d-4397-914a-c17c3e9de54b.jpg\",\r\n                    \"headUrl\": \"http://ossimages.shuzhehome.com/5e8e728e-374d-4397-914a-c17c3e9de54b.jpg?Expires=1634524240&OSSAccessKeyId=LTAI4FgfUX9ZF5JUmT7vcsk5&Signature=Eay3tpGXGimmKCfZ5ZYS6rjimg4%3D&x-oss-process=image%2Fresize%2Cp_5\",\r\n                    \"hospitalName\": \"四川省人民医院\",\r\n                    \"name\": \"刘晓岗\",\r\n                    \"gender\": 0,\r\n                    \"genderTag\": \"未知\",\r\n                    \"mobile\": \"13100000082\",\r\n                    \"loginName\": null\r\n                },\r\n                \"className\": \"测试9.14\",\r\n                \"classStatus\": 1,\r\n                \"classStatusTag\": \"报名中\",\r\n                \"operateStatus\": 0,\r\n                \"operateStatusTag\": \"尚未开课_未请假\"\r\n            },\r\n            {\r\n                \"id\": \"0be126b7-1776-4d68-b3a1-33b2fcfcd416\",\r\n                \"classId\": \"3891fa05-c465-4e4f-bbdf-93dfce39086f\",\r\n                \"name\": \"ces999\",\r\n                \"startTime\": \"2021-09-18 10:49:38\",\r\n                \"endTime\": null,\r\n                \"teacherId\": \"c32b87a5-2e13-c806-0ba0-08d6c1a7cbdd\",\r\n                \"needRollCall\": true,\r\n                \"isRollCalled\": false,\r\n                \"rollCallTime\": null,\r\n                \"allowLeave\": true,\r\n                \"saveNoteEnable\": true,\r\n                \"reminderEnable\": true,\r\n                \"playBackEnable\": true,\r\n                \"curriculumMethod\": 1,\r\n                \"curriculumMethodTag\": \"在线直播\",\r\n                \"curriculumStatus\": 1,\r\n                \"curriculumStatusTag\": \"开课中\",\r\n                \"introductionKey\": \"\",\r\n                \"introductionUrl\": \"\",\r\n                \"realTimeResourceKey\": null,\r\n                \"teacher\": {\r\n                    \"id\": \"c32b87a5-2e13-c806-0ba0-08d6c1a7cbdd\",\r\n                    \"jobTitle\": null,\r\n                    \"headKey\": \"5e8e728e-374d-4397-914a-c17c3e9de54b.jpg\",\r\n                    \"headUrl\": \"http://ossimages.shuzhehome.com/5e8e728e-374d-4397-914a-c17c3e9de54b.jpg?Expires=1634524240&OSSAccessKeyId=LTAI4FgfUX9ZF5JUmT7vcsk5&Signature=Eay3tpGXGimmKCfZ5ZYS6rjimg4%3D&x-oss-process=image%2Fresize%2Cp_5\",\r\n                    \"hospitalName\": \"四川省人民医院\",\r\n                    \"name\": \"刘晓岗\",\r\n                    \"gender\": 0,\r\n                    \"genderTag\": \"未知\",\r\n                    \"mobile\": \"13100000082\",\r\n                    \"loginName\": null\r\n                },\r\n                \"className\": \"测试9.14\",\r\n                \"classStatus\": 1,\r\n                \"classStatusTag\": \"报名中\",\r\n                \"operateStatus\": 0,\r\n                \"operateStatusTag\": \"尚未开课_未请假\"\r\n            },\r\n            {\r\n                \"id\": \"b5ee999c-b1f8-408a-8398-61288d022d0a\",\r\n                \"classId\": \"3891fa05-c465-4e4f-bbdf-93dfce39086f\",\r\n                \"name\": \"10.11\",\r\n                \"startTime\": \"2021-10-11 09:33:11\",\r\n                \"endTime\": null,\r\n                \"teacherId\": \"c32b87a5-2e13-c806-0ba0-08d6c1a7cbdd\",\r\n                \"needRollCall\": true,\r\n                \"isRollCalled\": false,\r\n                \"rollCallTime\": null,\r\n                \"allowLeave\": true,\r\n                \"saveNoteEnable\": true,\r\n                \"reminderEnable\": true,\r\n                \"playBackEnable\": true,\r\n                \"curriculumMethod\": 1,\r\n                \"curriculumMethodTag\": \"在线直播\",\r\n                \"curriculumStatus\": 0,\r\n                \"curriculumStatusTag\": \"未开始\",\r\n                \"introductionKey\": \"\",\r\n                \"introductionUrl\": \"\",\r\n                \"realTimeResourceKey\": null,\r\n                \"teacher\": {\r\n                    \"id\": \"c32b87a5-2e13-c806-0ba0-08d6c1a7cbdd\",\r\n                    \"jobTitle\": null,\r\n                    \"headKey\": \"5e8e728e-374d-4397-914a-c17c3e9de54b.jpg\",\r\n                    \"headUrl\": \"http://ossimages.shuzhehome.com/5e8e728e-374d-4397-914a-c17c3e9de54b.jpg?Expires=1634524240&OSSAccessKeyId=LTAI4FgfUX9ZF5JUmT7vcsk5&Signature=Eay3tpGXGimmKCfZ5ZYS6rjimg4%3D&x-oss-process=image%2Fresize%2Cp_5\",\r\n                    \"hospitalName\": \"四川省人民医院\",\r\n                    \"name\": \"刘晓岗\",\r\n                    \"gender\": 0,\r\n                    \"genderTag\": \"未知\",\r\n                    \"mobile\": \"13100000082\",\r\n                    \"loginName\": null\r\n                },\r\n                \"className\": \"测试9.14\",\r\n                \"classStatus\": 1,\r\n                \"classStatusTag\": \"报名中\",\r\n                \"operateStatus\": 0,\r\n                \"operateStatusTag\": \"尚未开课_未请假\"\r\n            },\r\n            {\r\n                \"id\": \"9337e2fc-92ad-4b3e-9f28-70e653266437\",\r\n                \"classId\": \"3891fa05-c465-4e4f-bbdf-93dfce39086f\",\r\n                \"name\": \"10.15\",\r\n                \"startTime\": \"2021-10-15 09:09:54\",\r\n                \"endTime\": null,\r\n                \"teacherId\": \"c32b87a5-2e13-c806-0ba0-08d6c1a7cbdd\",\r\n                \"needRollCall\": true,\r\n                \"isRollCalled\": false,\r\n                \"rollCallTime\": null,\r\n                \"allowLeave\": true,\r\n                \"saveNoteEnable\": true,\r\n                \"reminderEnable\": true,\r\n                \"playBackEnable\": true,\r\n                \"curriculumMethod\": 1,\r\n                \"curriculumMethodTag\": \"在线直播\",\r\n                \"curriculumStatus\": 0,\r\n                \"curriculumStatusTag\": \"未开始\",\r\n                \"introductionKey\": \"\",\r\n                \"introductionUrl\": \"\",\r\n                \"realTimeResourceKey\": null,\r\n                \"teacher\": {\r\n                    \"id\": \"c32b87a5-2e13-c806-0ba0-08d6c1a7cbdd\",\r\n                    \"jobTitle\": null,\r\n                    \"headKey\": \"5e8e728e-374d-4397-914a-c17c3e9de54b.jpg\",\r\n                    \"headUrl\": \"http://ossimages.shuzhehome.com/5e8e728e-374d-4397-914a-c17c3e9de54b.jpg?Expires=1634524240&OSSAccessKeyId=LTAI4FgfUX9ZF5JUmT7vcsk5&Signature=Eay3tpGXGimmKCfZ5ZYS6rjimg4%3D&x-oss-process=image%2Fresize%2Cp_5\",\r\n                    \"hospitalName\": \"四川省人民医院\",\r\n                    \"name\": \"刘晓岗\",\r\n                    \"gender\": 0,\r\n                    \"genderTag\": \"未知\",\r\n                    \"mobile\": \"13100000082\",\r\n                    \"loginName\": null\r\n                },\r\n                \"className\": \"测试9.14\",\r\n                \"classStatus\": 1,\r\n                \"classStatusTag\": \"报名中\",\r\n                \"operateStatus\": 0,\r\n                \"operateStatusTag\": \"尚未开课_未请假\"\r\n            },\r\n            {\r\n                \"id\": \"f86f9943-2177-4d73-a4f9-77193ddd8cf6\",\r\n                \"classId\": \"3891fa05-c465-4e4f-bbdf-93dfce39086f\",\r\n                \"name\": \"未开始的课程\",\r\n                \"startTime\": \"2021-09-29 10:10:34\",\r\n                \"endTime\": null,\r\n                \"teacherId\": \"c32b87a5-2e13-c806-0ba0-08d6c1a7cbdd\",\r\n                \"needRollCall\": true,\r\n                \"isRollCalled\": false,\r\n                \"rollCallTime\": null,\r\n                \"allowLeave\": true,\r\n                \"saveNoteEnable\": true,\r\n                \"reminderEnable\": true,\r\n                \"playBackEnable\": true,\r\n                \"curriculumMethod\": 1,\r\n                \"curriculumMethodTag\": \"在线直播\",\r\n                \"curriculumStatus\": 0,\r\n                \"curriculumStatusTag\": \"未开始\",\r\n                \"introductionKey\": \"\",\r\n                \"introductionUrl\": \"\",\r\n                \"realTimeResourceKey\": null,\r\n                \"teacher\": {\r\n                    \"id\": \"c32b87a5-2e13-c806-0ba0-08d6c1a7cbdd\",\r\n                    \"jobTitle\": null,\r\n                    \"headKey\": \"5e8e728e-374d-4397-914a-c17c3e9de54b.jpg\",\r\n                    \"headUrl\": \"http://ossimages.shuzhehome.com/5e8e728e-374d-4397-914a-c17c3e9de54b.jpg?Expires=1634524240&OSSAccessKeyId=LTAI4FgfUX9ZF5JUmT7vcsk5&Signature=Eay3tpGXGimmKCfZ5ZYS6rjimg4%3D&x-oss-process=image%2Fresize%2Cp_5\",\r\n                    \"hospitalName\": \"四川省人民医院\",\r\n                    \"name\": \"刘晓岗\",\r\n                    \"gender\": 0,\r\n                    \"genderTag\": \"未知\",\r\n                    \"mobile\": \"13100000082\",\r\n                    \"loginName\": null\r\n                },\r\n                \"className\": \"测试9.14\",\r\n                \"classStatus\": 1,\r\n                \"classStatusTag\": \"报名中\",\r\n                \"operateStatus\": 0,\r\n                \"operateStatusTag\": \"尚未开课_未请假\"\r\n            },\r\n            {\r\n                \"id\": \"5e3e0e85-5bfd-4446-9331-7a0b152d07d3\",\r\n                \"classId\": \"3891fa05-c465-4e4f-bbdf-93dfce39086f\",\r\n                \"name\": \"9.26\",\r\n                \"startTime\": \"2021-09-26 09:51:20\",\r\n                \"endTime\": null,\r\n                \"teacherId\": \"c32b87a5-2e13-c806-0ba0-08d6c1a7cbdd\",\r\n                \"needRollCall\": true,\r\n                \"isRollCalled\": true,\r\n                \"rollCallTime\": \"2021-09-26 11:46:09\",\r\n                \"allowLeave\": true,\r\n                \"saveNoteEnable\": true,\r\n                \"reminderEnable\": true,\r\n                \"playBackEnable\": true,\r\n                \"curriculumMethod\": 1,\r\n                \"curriculumMethodTag\": \"在线直播\",\r\n                \"curriculumStatus\": 1,\r\n                \"curriculumStatusTag\": \"开课中\",\r\n                \"introductionKey\": \"\",\r\n                \"introductionUrl\": \"\",\r\n                \"realTimeResourceKey\": null,\r\n                \"teacher\": {\r\n                    \"id\": \"c32b87a5-2e13-c806-0ba0-08d6c1a7cbdd\",\r\n                    \"jobTitle\": null,\r\n                    \"headKey\": \"5e8e728e-374d-4397-914a-c17c3e9de54b.jpg\",\r\n                    \"headUrl\": \"http://ossimages.shuzhehome.com/5e8e728e-374d-4397-914a-c17c3e9de54b.jpg?Expires=1634524240&OSSAccessKeyId=LTAI4FgfUX9ZF5JUmT7vcsk5&Signature=Eay3tpGXGimmKCfZ5ZYS6rjimg4%3D&x-oss-process=image%2Fresize%2Cp_5\",\r\n                    \"hospitalName\": \"四川省人民医院\",\r\n                    \"name\": \"刘晓岗\",\r\n                    \"gender\": 0,\r\n                    \"genderTag\": \"未知\",\r\n                    \"mobile\": \"13100000082\",\r\n                    \"loginName\": null\r\n                },\r\n                \"className\": \"测试9.14\",\r\n                \"classStatus\": 1,\r\n                \"classStatusTag\": \"报名中\",\r\n                \"operateStatus\": 0,\r\n                \"operateStatusTag\": \"尚未开课_未请假\"\r\n            },\r\n            {\r\n                \"id\": \"7935599f-b649-4ffe-8c21-7df0410a57ae\",\r\n                \"classId\": \"3891fa05-c465-4e4f-bbdf-93dfce39086f\",\r\n                \"name\": \"10.18\",\r\n                \"startTime\": \"2021-10-18 09:10:15\",\r\n                \"endTime\": null,\r\n                \"teacherId\": \"c32b87a5-2e13-c806-0ba0-08d6c1a7cbdd\",\r\n                \"needRollCall\": true,\r\n                \"isRollCalled\": false,\r\n                \"rollCallTime\": null,\r\n                \"allowLeave\": true,\r\n                \"saveNoteEnable\": true,\r\n                \"reminderEnable\": true,\r\n                \"playBackEnable\": true,\r\n                \"curriculumMethod\": 1,\r\n                \"curriculumMethodTag\": \"在线直播\",\r\n                \"curriculumStatus\": 0,\r\n                \"curriculumStatusTag\": \"未开始\",\r\n                \"introductionKey\": \"\",\r\n                \"introductionUrl\": \"\",\r\n                \"realTimeResourceKey\": null,\r\n                \"teacher\": {\r\n                    \"id\": \"c32b87a5-2e13-c806-0ba0-08d6c1a7cbdd\",\r\n                    \"jobTitle\": null,\r\n                    \"headKey\": \"5e8e728e-374d-4397-914a-c17c3e9de54b.jpg\",\r\n                    \"headUrl\": \"http://ossimages.shuzhehome.com/5e8e728e-374d-4397-914a-c17c3e9de54b.jpg?Expires=1634524240&OSSAccessKeyId=LTAI4FgfUX9ZF5JUmT7vcsk5&Signature=Eay3tpGXGimmKCfZ5ZYS6rjimg4%3D&x-oss-process=image%2Fresize%2Cp_5\",\r\n                    \"hospitalName\": \"四川省人民医院\",\r\n                    \"name\": \"刘晓岗\",\r\n                    \"gender\": 0,\r\n                    \"genderTag\": \"未知\",\r\n                    \"mobile\": \"13100000082\",\r\n                    \"loginName\": null\r\n                },\r\n                \"className\": \"测试9.14\",\r\n                \"classStatus\": 1,\r\n                \"classStatusTag\": \"报名中\",\r\n                \"operateStatus\": 0,\r\n                \"operateStatusTag\": \"尚未开课_未请假\"\r\n            },\r\n            {\r\n                \"id\": \"94035691-25f4-4749-a561-9612bf05457b\",\r\n                \"classId\": \"3891fa05-c465-4e4f-bbdf-93dfce39086f\",\r\n                \"name\": \"测试9.23\",\r\n                \"startTime\": \"2021-09-23 09:10:42\",\r\n                \"endTime\": null,\r\n                \"teacherId\": \"c32b87a5-2e13-c806-0ba0-08d6c1a7cbdd\",\r\n                \"needRollCall\": true,\r\n                \"isRollCalled\": true,\r\n                \"rollCallTime\": \"2021-09-23 16:23:27\",\r\n                \"allowLeave\": true,\r\n                \"saveNoteEnable\": true,\r\n                \"reminderEnable\": true,\r\n                \"playBackEnable\": true,\r\n                \"curriculumMethod\": 1,\r\n                \"curriculumMethodTag\": \"在线直播\",\r\n                \"curriculumStatus\": 1,\r\n                \"curriculumStatusTag\": \"开课中\",\r\n                \"introductionKey\": \"\",\r\n                \"introductionUrl\": \"\",\r\n                \"realTimeResourceKey\": null,\r\n                \"teacher\": {\r\n                    \"id\": \"c32b87a5-2e13-c806-0ba0-08d6c1a7cbdd\",\r\n                    \"jobTitle\": null,\r\n                    \"headKey\": \"5e8e728e-374d-4397-914a-c17c3e9de54b.jpg\",\r\n                    \"headUrl\": \"http://ossimages.shuzhehome.com/5e8e728e-374d-4397-914a-c17c3e9de54b.jpg?Expires=1634524240&OSSAccessKeyId=LTAI4FgfUX9ZF5JUmT7vcsk5&Signature=Eay3tpGXGimmKCfZ5ZYS6rjimg4%3D&x-oss-process=image%2Fresize%2Cp_5\",\r\n                    \"hospitalName\": \"四川省人民医院\",\r\n                    \"name\": \"刘晓岗\",\r\n                    \"gender\": 0,\r\n                    \"genderTag\": \"未知\",\r\n                    \"mobile\": \"13100000082\",\r\n                    \"loginName\": null\r\n                },\r\n                \"className\": \"测试9.14\",\r\n                \"classStatus\": 1,\r\n                \"classStatusTag\": \"报名中\",\r\n                \"operateStatus\": 0,\r\n                \"operateStatusTag\": \"尚未开课_未请假\"\r\n            },\r\n            {\r\n                \"id\": \"e4e2429f-dc4b-4f24-9cb2-a2bff1e1a739\",\r\n                \"classId\": \"3891fa05-c465-4e4f-bbdf-93dfce39086f\",\r\n                \"name\": \"9.27\",\r\n                \"startTime\": \"2021-09-27 15:28:49\",\r\n                \"endTime\": null,\r\n                \"teacherId\": \"c32b87a5-2e13-c806-0ba0-08d6c1a7cbdd\",\r\n                \"needRollCall\": true,\r\n                \"isRollCalled\": true,\r\n                \"rollCallTime\": \"2021-09-27 17:17:48\",\r\n                \"allowLeave\": true,\r\n                \"saveNoteEnable\": true,\r\n                \"reminderEnable\": true,\r\n                \"playBackEnable\": true,\r\n                \"curriculumMethod\": 1,\r\n                \"curriculumMethodTag\": \"在线直播\",\r\n                \"curriculumStatus\": 1,\r\n                \"curriculumStatusTag\": \"开课中\",\r\n                \"introductionKey\": \"\",\r\n                \"introductionUrl\": \"\",\r\n                \"realTimeResourceKey\": null,\r\n                \"teacher\": {\r\n                    \"id\": \"c32b87a5-2e13-c806-0ba0-08d6c1a7cbdd\",\r\n                    \"jobTitle\": null,\r\n                    \"headKey\": \"5e8e728e-374d-4397-914a-c17c3e9de54b.jpg\",\r\n                    \"headUrl\": \"http://ossimages.shuzhehome.com/5e8e728e-374d-4397-914a-c17c3e9de54b.jpg?Expires=1634524240&OSSAccessKeyId=LTAI4FgfUX9ZF5JUmT7vcsk5&Signature=Eay3tpGXGimmKCfZ5ZYS6rjimg4%3D&x-oss-process=image%2Fresize%2Cp_5\",\r\n                    \"hospitalName\": \"四川省人民医院\",\r\n                    \"name\": \"刘晓岗\",\r\n                    \"gender\": 0,\r\n                    \"genderTag\": \"未知\",\r\n                    \"mobile\": \"13100000082\",\r\n                    \"loginName\": null\r\n                },\r\n                \"className\": \"测试9.14\",\r\n                \"classStatus\": 1,\r\n                \"classStatusTag\": \"报名中\",\r\n                \"operateStatus\": 0,\r\n                \"operateStatusTag\": \"尚未开课_未请假\"\r\n            },\r\n            {\r\n                \"id\": \"e9f52472-e9d7-485d-a8ea-a4d89a224828\",\r\n                \"classId\": \"3891fa05-c465-4e4f-bbdf-93dfce39086f\",\r\n                \"name\": \"测试课程\",\r\n                \"startTime\": \"2021-09-23 15:48:09\",\r\n                \"endTime\": null,\r\n                \"teacherId\": \"a4e085ad-1bfb-4989-65e6-08d7b9a49e9b\",\r\n                \"needRollCall\": true,\r\n                \"isRollCalled\": false,\r\n                \"rollCallTime\": \"2021-09-23 15:57:54\",\r\n                \"allowLeave\": true,\r\n                \"saveNoteEnable\": true,\r\n                \"reminderEnable\": true,\r\n                \"playBackEnable\": true,\r\n                \"curriculumMethod\": 1,\r\n                \"curriculumMethodTag\": \"在线直播\",\r\n                \"curriculumStatus\": 1,\r\n                \"curriculumStatusTag\": \"开课中\",\r\n                \"introductionKey\": \"9f791ae8-cf4a-48f0-9e70-6b27a85bcd0e.png\",\r\n                \"introductionUrl\": \"http://ossimages.shuzhehome.com/9f791ae8-cf4a-48f0-9e70-6b27a85bcd0e.png?Expires=1634524240&OSSAccessKeyId=LTAI4FgfUX9ZF5JUmT7vcsk5&Signature=BLFdNztiCOCM0ygJBXuXyA2U7R0%3D&x-oss-process=image%2Fresize%2Cp_50\",\r\n                \"realTimeResourceKey\": null,\r\n                \"teacher\": null,\r\n                \"className\": \"测试9.14\",\r\n                \"classStatus\": 1,\r\n                \"classStatusTag\": \"报名中\",\r\n                \"operateStatus\": 0,\r\n                \"operateStatusTag\": \"尚未开课_未请假\"\r\n            },\r\n            {\r\n                \"id\": \"8a0069df-2d88-41f7-8e90-c465bbb19f92\",\r\n                \"classId\": \"3891fa05-c465-4e4f-bbdf-93dfce39086f\",\r\n                \"name\": \"测试课程\",\r\n                \"startTime\": \"2021-10-11 09:08:08\",\r\n                \"endTime\": null,\r\n                \"teacherId\": \"c32b87a5-2e13-c806-0ba0-08d6c1a7cbdd\",\r\n                \"needRollCall\": true,\r\n                \"isRollCalled\": false,\r\n                \"rollCallTime\": null,\r\n                \"allowLeave\": true,\r\n                \"saveNoteEnable\": true,\r\n                \"reminderEnable\": true,\r\n                \"playBackEnable\": true,\r\n                \"curriculumMethod\": 1,\r\n                \"curriculumMethodTag\": \"在线直播\",\r\n                \"curriculumStatus\": 0,\r\n                \"curriculumStatusTag\": \"未开始\",\r\n                \"introductionKey\": \"\",\r\n                \"introductionUrl\": \"\",\r\n                \"realTimeResourceKey\": null,\r\n                \"teacher\": {\r\n                    \"id\": \"c32b87a5-2e13-c806-0ba0-08d6c1a7cbdd\",\r\n                    \"jobTitle\": null,\r\n                    \"headKey\": \"5e8e728e-374d-4397-914a-c17c3e9de54b.jpg\",\r\n                    \"headUrl\": \"http://ossimages.shuzhehome.com/5e8e728e-374d-4397-914a-c17c3e9de54b.jpg?Expires=1634524240&OSSAccessKeyId=LTAI4FgfUX9ZF5JUmT7vcsk5&Signature=Eay3tpGXGimmKCfZ5ZYS6rjimg4%3D&x-oss-process=image%2Fresize%2Cp_5\",\r\n                    \"hospitalName\": \"四川省人民医院\",\r\n                    \"name\": \"刘晓岗\",\r\n                    \"gender\": 0,\r\n                    \"genderTag\": \"未知\",\r\n                    \"mobile\": \"13100000082\",\r\n                    \"loginName\": null\r\n                },\r\n                \"className\": \"测试9.14\",\r\n                \"classStatus\": 1,\r\n                \"classStatusTag\": \"报名中\",\r\n                \"operateStatus\": 0,\r\n                \"operateStatusTag\": \"尚未开课_未请假\"\r\n            },\r\n            {\r\n                \"id\": \"939539c1-3e23-4e89-b96a-c53281ffff26\",\r\n                \"classId\": \"3891fa05-c465-4e4f-bbdf-93dfce39086f\",\r\n                \"name\": \"10.14\",\r\n                \"startTime\": \"2021-10-14 09:16:23\",\r\n                \"endTime\": null,\r\n                \"teacherId\": \"c32b87a5-2e13-c806-0ba0-08d6c1a7cbdd\",\r\n                \"needRollCall\": true,\r\n                \"isRollCalled\": false,\r\n                \"rollCallTime\": null,\r\n                \"allowLeave\": true,\r\n                \"saveNoteEnable\": true,\r\n                \"reminderEnable\": true,\r\n                \"playBackEnable\": true,\r\n                \"curriculumMethod\": 1,\r\n                \"curriculumMethodTag\": \"在线直播\",\r\n                \"curriculumStatus\": 0,\r\n                \"curriculumStatusTag\": \"未开始\",\r\n                \"introductionKey\": \"\",\r\n                \"introductionUrl\": \"\",\r\n                \"realTimeResourceKey\": null,\r\n                \"teacher\": {\r\n                    \"id\": \"c32b87a5-2e13-c806-0ba0-08d6c1a7cbdd\",\r\n                    \"jobTitle\": null,\r\n                    \"headKey\": \"5e8e728e-374d-4397-914a-c17c3e9de54b.jpg\",\r\n                    \"headUrl\": \"http://ossimages.shuzhehome.com/5e8e728e-374d-4397-914a-c17c3e9de54b.jpg?Expires=1634524240&OSSAccessKeyId=LTAI4FgfUX9ZF5JUmT7vcsk5&Signature=Eay3tpGXGimmKCfZ5ZYS6rjimg4%3D&x-oss-process=image%2Fresize%2Cp_5\",\r\n                    \"hospitalName\": \"四川省人民医院\",\r\n                    \"name\": \"刘晓岗\",\r\n                    \"gender\": 0,\r\n                    \"genderTag\": \"未知\",\r\n                    \"mobile\": \"13100000082\",\r\n                    \"loginName\": null\r\n                },\r\n                \"className\": \"测试9.14\",\r\n                \"classStatus\": 1,\r\n                \"classStatusTag\": \"报名中\",\r\n                \"operateStatus\": 0,\r\n                \"operateStatusTag\": \"尚未开课_未请假\"\r\n            },\r\n            {\r\n                \"id\": \"e972d2c9-8122-44d0-b017-c59854ab9386\",\r\n                \"classId\": \"3891fa05-c465-4e4f-bbdf-93dfce39086f\",\r\n                \"name\": \"9.30\",\r\n                \"startTime\": \"2021-09-30 09:08:45\",\r\n                \"endTime\": null,\r\n                \"teacherId\": \"c32b87a5-2e13-c806-0ba0-08d6c1a7cbdd\",\r\n                \"needRollCall\": true,\r\n                \"isRollCalled\": false,\r\n                \"rollCallTime\": null,\r\n                \"allowLeave\": true,\r\n                \"saveNoteEnable\": true,\r\n                \"reminderEnable\": true,\r\n                \"playBackEnable\": true,\r\n                \"curriculumMethod\": 1,\r\n                \"curriculumMethodTag\": \"在线直播\",\r\n                \"curriculumStatus\": 0,\r\n                \"curriculumStatusTag\": \"未开始\",\r\n                \"introductionKey\": \"\",\r\n                \"introductionUrl\": \"\",\r\n                \"realTimeResourceKey\": null,\r\n                \"teacher\": {\r\n                    \"id\": \"c32b87a5-2e13-c806-0ba0-08d6c1a7cbdd\",\r\n                    \"jobTitle\": null,\r\n                    \"headKey\": \"5e8e728e-374d-4397-914a-c17c3e9de54b.jpg\",\r\n                    \"headUrl\": \"http://ossimages.shuzhehome.com/5e8e728e-374d-4397-914a-c17c3e9de54b.jpg?Expires=1634524240&OSSAccessKeyId=LTAI4FgfUX9ZF5JUmT7vcsk5&Signature=Eay3tpGXGimmKCfZ5ZYS6rjimg4%3D&x-oss-process=image%2Fresize%2Cp_5\",\r\n                    \"hospitalName\": \"四川省人民医院\",\r\n                    \"name\": \"刘晓岗\",\r\n                    \"gender\": 0,\r\n                    \"genderTag\": \"未知\",\r\n                    \"mobile\": \"13100000082\",\r\n                    \"loginName\": null\r\n                },\r\n                \"className\": \"测试9.14\",\r\n                \"classStatus\": 1,\r\n                \"classStatusTag\": \"报名中\",\r\n                \"operateStatus\": 0,\r\n                \"operateStatusTag\": \"尚未开课_未请假\"\r\n            },\r\n            {\r\n                \"id\": \"cb6210bd-4412-4cff-b02a-df51f8583958\",\r\n                \"classId\": \"3891fa05-c465-4e4f-bbdf-93dfce39086f\",\r\n                \"name\": \"10.8\",\r\n                \"startTime\": \"2021-10-08 09:53:04\",\r\n                \"endTime\": null,\r\n                \"teacherId\": \"a4e085ad-1bfb-4989-65e6-08d7b9a49e9b\",\r\n                \"needRollCall\": true,\r\n                \"isRollCalled\": false,\r\n                \"rollCallTime\": null,\r\n                \"allowLeave\": true,\r\n                \"saveNoteEnable\": true,\r\n                \"reminderEnable\": true,\r\n                \"playBackEnable\": true,\r\n                \"curriculumMethod\": 1,\r\n                \"curriculumMethodTag\": \"在线直播\",\r\n                \"curriculumStatus\": 0,\r\n                \"curriculumStatusTag\": \"未开始\",\r\n                \"introductionKey\": \"\",\r\n                \"introductionUrl\": \"\",\r\n                \"realTimeResourceKey\": null,\r\n                \"teacher\": null,\r\n                \"className\": \"测试9.14\",\r\n                \"classStatus\": 1,\r\n                \"classStatusTag\": \"报名中\",\r\n                \"operateStatus\": 0,\r\n                \"operateStatusTag\": \"尚未开课_未请假\"\r\n            },\r\n            {\r\n                \"id\": \"8b04d7e9-e240-4a83-8eb7-e0529e9930f1\",\r\n                \"classId\": \"3891fa05-c465-4e4f-bbdf-93dfce39086f\",\r\n                \"name\": \"10.9\",\r\n                \"startTime\": \"2021-10-09 09:41:13\",\r\n                \"endTime\": null,\r\n                \"teacherId\": \"c32b87a5-2e13-c806-0ba0-08d6c1a7cbdd\",\r\n                \"needRollCall\": true,\r\n                \"isRollCalled\": false,\r\n                \"rollCallTime\": null,\r\n                \"allowLeave\": true,\r\n                \"saveNoteEnable\": true,\r\n                \"reminderEnable\": true,\r\n                \"playBackEnable\": true,\r\n                \"curriculumMethod\": 1,\r\n                \"curriculumMethodTag\": \"在线直播\",\r\n                \"curriculumStatus\": 0,\r\n                \"curriculumStatusTag\": \"未开始\",\r\n                \"introductionKey\": \"\",\r\n                \"introductionUrl\": \"\",\r\n                \"realTimeResourceKey\": null,\r\n                \"teacher\": {\r\n                    \"id\": \"c32b87a5-2e13-c806-0ba0-08d6c1a7cbdd\",\r\n                    \"jobTitle\": null,\r\n                    \"headKey\": \"5e8e728e-374d-4397-914a-c17c3e9de54b.jpg\",\r\n                    \"headUrl\": \"http://ossimages.shuzhehome.com/5e8e728e-374d-4397-914a-c17c3e9de54b.jpg?Expires=1634524240&OSSAccessKeyId=LTAI4FgfUX9ZF5JUmT7vcsk5&Signature=Eay3tpGXGimmKCfZ5ZYS6rjimg4%3D&x-oss-process=image%2Fresize%2Cp_5\",\r\n                    \"hospitalName\": \"四川省人民医院\",\r\n                    \"name\": \"刘晓岗\",\r\n                    \"gender\": 0,\r\n                    \"genderTag\": \"未知\",\r\n                    \"mobile\": \"13100000082\",\r\n                    \"loginName\": null\r\n                },\r\n                \"className\": \"测试9.14\",\r\n                \"classStatus\": 1,\r\n                \"classStatusTag\": \"报名中\",\r\n                \"operateStatus\": 0,\r\n                \"operateStatusTag\": \"尚未开课_未请假\"\r\n            },\r\n            {\r\n                \"id\": \"71a74b53-c1a4-437c-8879-edebfa012a58\",\r\n                \"classId\": \"3891fa05-c465-4e4f-bbdf-93dfce39086f\",\r\n                \"name\": \"9.272\",\r\n                \"startTime\": \"2021-09-27 17:49:13\",\r\n                \"endTime\": \"2021-09-27 17:50:58\",\r\n                \"teacherId\": \"c32b87a5-2e13-c806-0ba0-08d6c1a7cbdd\",\r\n                \"needRollCall\": true,\r\n                \"isRollCalled\": true,\r\n                \"rollCallTime\": \"2021-09-27 17:50:53\",\r\n                \"allowLeave\": true,\r\n                \"saveNoteEnable\": true,\r\n                \"reminderEnable\": true,\r\n                \"playBackEnable\": true,\r\n                \"curriculumMethod\": 1,\r\n                \"curriculumMethodTag\": \"在线直播\",\r\n                \"curriculumStatus\": 2,\r\n                \"curriculumStatusTag\": \"已结束\",\r\n                \"introductionKey\": \"\",\r\n                \"introductionUrl\": \"\",\r\n                \"realTimeResourceKey\": null,\r\n                \"teacher\": {\r\n                    \"id\": \"c32b87a5-2e13-c806-0ba0-08d6c1a7cbdd\",\r\n                    \"jobTitle\": null,\r\n                    \"headKey\": \"5e8e728e-374d-4397-914a-c17c3e9de54b.jpg\",\r\n                    \"headUrl\": \"http://ossimages.shuzhehome.com/5e8e728e-374d-4397-914a-c17c3e9de54b.jpg?Expires=1634524240&OSSAccessKeyId=LTAI4FgfUX9ZF5JUmT7vcsk5&Signature=Eay3tpGXGimmKCfZ5ZYS6rjimg4%3D&x-oss-process=image%2Fresize%2Cp_5\",\r\n                    \"hospitalName\": \"四川省人民医院\",\r\n                    \"name\": \"刘晓岗\",\r\n                    \"gender\": 0,\r\n                    \"genderTag\": \"未知\",\r\n                    \"mobile\": \"13100000082\",\r\n                    \"loginName\": null\r\n                },\r\n                \"className\": \"测试9.14\",\r\n                \"classStatus\": 1,\r\n                \"classStatusTag\": \"报名中\",\r\n                \"operateStatus\": 0,\r\n                \"operateStatusTag\": \"尚未开课_未请假\"\r\n            }\r\n        ]\r\n    },\r\n    \"isSucceed\": true,\r\n    \"message\": \"查询成功\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://192.168.0.114:5001/v1.0/ClassCurriculum/update"
+					},
+					"response": []
+				},
+				{
+					"name": "添加学员",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//性能断言 接口响应时间 不能大于200ms\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"//业务断言 \r",
+									"pm.test(\"Your test name\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.isSucceed).to.eql(true);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"classId\":\"{{classId}}\",\"name\":\"接口测试1634183524\",\"studentId\":\"{{Id}}\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://192.168.0.114:5001/v1.0/Class/addStudent"
+					},
+					"response": []
+				},
+				{
+					"name": "通过加入的学员",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//性能断言  接口返回的时间不能大于200ms\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"//业务断言 \r",
+									"pm.test(\"Your test name\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.isSucceed).to.eql(true);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"classId\":\"{{classId}}\",\"studentId\":\"{{Id}}\",\"applyStatus\":2}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://192.168.0.114:5001/v1.0/Class/updateStudentStatus"
+					},
+					"response": []
+				},
+				{
+					"name": "设置辅导专员",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//性能断言  接口返回的时间不能大于200ms\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"//业务断言 \r",
+									"pm.test(\"Your test name\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.isSucceed).to.eql(true);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"id\":\"{{classId}}\",\"instructorUserId\":\"{{instructorUserId}}\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://192.168.0.114:5001/v1.0/Class/setInstructor"
+					},
+					"response": []
+				},
+				{
+					"name": "查询班级详细信息 获取classname   课程id 辅导专员 Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//先将responseBody 的json存在jsonData变量里\r",
+									"var jsonData = pm.response.json();\r",
+									"//获取到需要的班级name\r",
+									"var  className = jsonData.data.name\r",
+									"console.log(className)\r",
+									"pm.environment.set(\"className\", className);\r",
+									"//读取课程ID\r",
+									"var courseId = jsonData.data.classCurriculums[0].id\r",
+									"console.log(courseId)\r",
+									"//设置courseId成环境变量\r",
+									"pm.environment.set(\"courseId\",courseId);\r",
+									"//找到辅导专员标志\r",
+									"var instructorUserId = jsonData.data.instructorUserId\r",
+									"console.log(instructorUserId)\r",
+									"pm.environment.set(\"instructorUserId\",instructorUserId)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/v1.0/Class/getById?id={{classId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1.0",
+								"Class",
+								"getById"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "{{classId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "删除班级学员",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//性能断言 接口响应时间不能低于200ms\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"//业务断言 \r",
+									"pm.test(\"Your test name\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.isSucceed).to.eql(true);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"classId\":\"{{classId}}\",\"studentId\":\"{{Id}}\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://192.168.0.114:5001/v1.0/Class/deleteStudent"
+					},
+					"response": []
+				},
+				{
+					"name": "删除课程",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//性能断言 接口的响应时间不能大于200ms\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"//业务断言  \r",
+									"pm.test(\"删除课程状态\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.isSucceed).to.eql(true);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"classId\":\"{{classId}}\",\"curriculumId\":\"{{courseId}}\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://192.168.0.114:5001/v1.0/ClassCurriculum/delete"
+					},
+					"response": []
+				},
+				{
+					"name": "删除班级",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//性能断言 接口响应时间不能大于200ms\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"//业务断言  \r",
+									"pm.test(\"Your test name\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.message).to.eql(\"成功\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://192.168.0.114:5001/v1.0/Class/deleteclass?id={{classId}}",
+							"protocol": "http",
+							"host": [
+								"192",
+								"168",
+								"0",
+								"114"
+							],
+							"port": "5001",
+							"path": [
+								"v1.0",
+								"Class",
+								"deleteclass"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "{{classId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "通过id删除用户",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//断言请求的状态是不是200\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"//性能断言  接口响应时间不能大于200ms\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "PUT",
+						"header": [],
+						"url": "{{baseUrl}}/v1.0/User/delete/{{Id}}"
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": {
+					"token": "{{token}}"
+				}
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	]
+}
